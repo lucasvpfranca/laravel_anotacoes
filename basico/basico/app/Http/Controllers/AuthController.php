@@ -12,9 +12,6 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function logout() {
-            return "Logout";
-    }
 
     public function loginSubmit(Request $r) {
 
@@ -35,21 +32,57 @@ class AuthController extends Controller
     $username = $r->input("text_username");
     $password = $r->input("text_password");
 
-    $users = User::all()->toArray();
-    echo "<pre>";
-    print_r($users);
-    $userModel = new User();
-    $users = $userModel->all()->toArray();
 
 
-        try {
 
-            DB::connection()->getPdo();
-            echo "Conexão OK";
+    // $users = User::all()->toArray();
+    // echo "<pre>";
+    // print_r($users);
+    // $userModel = new User();
+    // $users = $userModel->all()->toArray();
 
-        } catch(\PDOException $e) {
-            echo "Conexão Falhou".$e->getMessage();
-        }
+
+    //     try {
+
+    //         DB::connection()->getPdo();
+    //         echo "Conexão OK";
+
+    //     } catch(\PDOException $e) {
+    //         echo "Conexão Falhou".$e->getMessage();
+    //     }
+
+    $user = User::where('username', $username)
+    ->where('deleted_at', NULL)
+    ->first();
+    // print_r($user);
+
+    if(!$user) {
+        return redirect()->back()->withInput()->with('loginError', 'Username ou password incorretos');
 
     }
+
+    if(!password_verify($password, $user->password)) {
+        return redirect()->back()->withInput()->with('loginError', 'Username ou password incorretos');
+
+    }
+    $user->last_login = date('Y-m-d H:i:s');
+    $user->save();
+
+    session([
+        'user' => [
+            'id' => $user->id,
+            'username' => $user->username
+        ]
+        ]);
+        return redirect()->to('/');
+    }
+
+
+    public function logout() {
+
+        session()->forget('user');
+        return redirect()->to('/login');
+
+    }
+
 }

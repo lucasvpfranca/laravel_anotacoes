@@ -25,3 +25,6 @@ php artisan db:seed UsersTableSeeder
 php artisan make:model User
 
 
+
+php artisan make:middleware CheckIsLogged
+php artisan make:middleware CheckIsNotLogged
