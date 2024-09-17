@@ -28,3 +28,5 @@ php artisan make:model User
 
 php artisan make:middleware CheckIsLogged
 php artisan make:middleware CheckIsNotLogged
+
+php artisan make:view top_bar
