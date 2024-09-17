@@ -3,6 +3,7 @@
 composer create-project laravel/laravel basico
 
 
+# Comandos Artisan
 php artisan make:controller MainController
 
 php artisan make:view layouts/main_layout
@@ -22,3 +23,5 @@ php artisan make:seeder UsersTableSeeder
 php artisan db:seed UsersTableSeeder
 
 php artisan make:model User
+
+
